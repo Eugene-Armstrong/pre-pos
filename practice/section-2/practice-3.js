@@ -1,27 +1,42 @@
 'use strict';
 
-function countSameElements(collection) {
-	let arr = [];
-	for (let i = 0; i < collection.length; i++) {
-		let num = 0;
-	    for (let j = i; j < collection.length; j++) {
-			if (collection[i] === collection[j]) {
-				num++;
+function countSameElements(collection){
+    let result = [];
+    for (let ele of collection) {
+        let obj = {
+            name: ele[0],
+            summary: 1
+        }
+        if (ele.length > 1) {
+            obj = {
+                name: ele[0],
+                summary: parseInt(ele.replace(/[^0-9]/ig,""))
+            }
+        }
+        result.push(obj);
+    }
+    // console.info(result);
+    let finalResult = getResult(result);
+    return finalResult;
+}
+
+function getResult (arr) {
+	let obj = {}
+	let result = []
+	arr.forEach(({name, summary}) => {
+		let cur = obj[name]
+		if (cur) {
+			let index = cur.index;
+			result[index].summary += summary;
+	    } else {
+			let index = result.length;
+			obj[name] = {
+				name,
+				index
 			}
+			result.push({name, summary});
 		}
-		console.log(i);
-		let tmpStr = collection[i].toString();
-		if(tmpStr.length>1){
-			collection[i] = tmpStr.substr(0,1);
-			tmpStr = tmpStr.replace(/[^0-9]/ig,"");
-			// console.log(collection[i]+":"+tmpStr);
-			num = parseInt(tmpStr);
-		}
-		arr.push({
-			key: collection[i],
-			count: num
-		})
-		i+=num-1;
-	}
-	return arr;
+	})
+	console.info(result);
+	return result;
 }
